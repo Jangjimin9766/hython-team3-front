@@ -133,6 +133,7 @@ class HomePage extends StatelessWidget {
   }) {
     return Card(
       elevation: 2,
+      color: Colors.white, // 배경 색상을 흰색으로 설정
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
