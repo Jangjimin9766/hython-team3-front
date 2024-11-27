@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hy_thon_team3/pages/receivedLetterBoxPage.dart';
+import 'package:hy_thon_team3/pages/sendedLetterboxPage.dart';
 import 'widgets/bottom_navbar.dart';
 import 'pages/homePage.dart';
 
@@ -26,9 +28,9 @@ class _MainPageState extends State<MainPage> {
 
   // 각 탭에 표시될 페이지들
   static final List<Widget> _pages = <Widget>[
-    Center(child: Text('찾기 페이지입니다', style: TextStyle(fontSize: 24))),
+    const SendedLetterBoxPage(), // 찾기 페이지 대신 SendedLetterBoxPage 사용
     const HomePage(),
-    Center(child: Text('마이페이지입니다', style: TextStyle(fontSize: 24))),
+    const ReceivedLetterBoxPage(),
   ];
 
   void _onItemTapped(int index) {

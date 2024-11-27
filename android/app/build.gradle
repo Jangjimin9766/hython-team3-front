@@ -19,12 +19,12 @@ def flutterVersionName = localProperties.getProperty("flutter.versionName", "1.0
 
 android {
     namespace = "com.example.hy_thon_team3"
-    compileSdk = 33 // 최신 버전으로 설정
+    compileSdk = 34 // 최신 버전으로 설정
 
     defaultConfig {
         applicationId = "com.example.hy_thon_team3"
         minSdk = 21 // 권장 최소값
-        targetSdk = 33 // 최신 버전
+        targetSdk = 34 // 최신 버전
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
     }
