@@ -8,7 +8,7 @@
     <application
         android:label="hy_thon_team3"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launch_image"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
