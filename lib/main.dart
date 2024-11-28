@@ -5,6 +5,7 @@ import 'package:hy_thon_team3/pages/sendedLetterboxPage.dart';
 import 'widgets/bottom_navbar.dart';
 import 'pages/homePage.dart';
 import 'pages/OnBoardingPage.dart';
+import 'pages/loginPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -99,7 +100,7 @@ class _MainPageState extends State<MainPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => OnboardingPage()),
+            MaterialPageRoute(builder: (context) => const LoginPage()),
           );
         },
         backgroundColor: Colors.grey,
