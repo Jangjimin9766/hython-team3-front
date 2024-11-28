@@ -7,7 +7,8 @@ import '../components/DateSelector.dart';
 import '../components/DiaryInputCard.dart';
 import '../components/ButtonPickPicture.dart';
 import '../components/ButtonSubmit.dart';
-import './completeWriteDiaryPage.dart'; // CompleteWriteDiaryPage import
+import './completeWriteDiaryPage.dart';
+import '../widgets//bottom_navbar.dart';
 
 class WriteDiaryPage extends StatefulWidget {
   const WriteDiaryPage({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class _WriteDiaryPageState extends State<WriteDiaryPage> {
   XFile? _image;
   final ImagePicker picker = ImagePicker();
   bool _isButtonEnabled = false; // 버튼 활성화 상태
+  int _selectedIndex = 1; // BottomNavBar에서 선택된 탭 (1: 다이어리)
 
   // 이미지 선택 함수
   Future<void> _selectImage(ImageSource source) async {
@@ -28,6 +30,24 @@ class _WriteDiaryPageState extends State<WriteDiaryPage> {
       setState(() {
         _image = pickedFile;
       });
+    }
+  }
+
+  // BottomNavBar 탭 변경 함수
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // 페이지 이동 로직
+    if (index == 0) {
+      // 찾기 페이지로 이동
+      Navigator.pushNamed(context, '/search');
+    } else if (index == 1) {
+      // 현재 페이지 (홈/다이어리)
+    } else if (index == 2) {
+      // 마이페이지로 이동
+      Navigator.pushNamed(context, '/mypage');
     }
   }
 
@@ -68,7 +88,7 @@ class _WriteDiaryPageState extends State<WriteDiaryPage> {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 10,right: 10, bottom: 20),
+                    padding: const EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
                     child: ButtonSubmit(
                       onPressed: _isButtonEnabled
                           ? () {
@@ -88,6 +108,10 @@ class _WriteDiaryPageState extends State<WriteDiaryPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }

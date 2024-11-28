@@ -46,7 +46,7 @@ class _DiaryInputCardState extends State<DiaryInputCard> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Container(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(top:20,left:10,right:10,bottom:0 ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -105,7 +105,7 @@ class _DiaryInputCardState extends State<DiaryInputCard> {
             ),
             if (_characterCount < 50)
               const Padding(
-                padding: EdgeInsets.only(top: 8, left: 16),
+                padding: EdgeInsets.only(top: 8, left: 6),
                 child: Text(
                   '50자 이상 입력해주세요.', // 경고 메시지
                   style: TextStyle(fontSize: 12, color: Colors.red),

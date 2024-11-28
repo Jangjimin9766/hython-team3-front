@@ -3,6 +3,7 @@ import 'package:hy_thon_team3/pages/receivedLetterBoxPage.dart';
 import 'package:hy_thon_team3/pages/sendedLetterboxPage.dart';
 import 'widgets/bottom_navbar.dart';
 import 'pages/homePage.dart';
+import 'pages/OnBoardingPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -54,7 +55,12 @@ class _MainPageState extends State<MainPage> {
 
         onPressed: () {
           // 버튼 클릭 시 실행할 동작
-          print('Floating Action Button 클릭됨');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OnboardingPage(),
+            ),
+          );
         },
         backgroundColor: Colors.grey, // 버튼 배경색을 회색으로 설정
         shape: CircleBorder(), // 원형 버튼 강제 설정
