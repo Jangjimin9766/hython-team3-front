@@ -20,6 +20,7 @@ dev_dependencies:
   flutter_native_splash: ^2.2.6
   flutter_lints: ^3.0.0
   shared_preferences: ^2.1.1
+  table_calendar: ^3.0.9
 
 flutter:
   uses-material-design: true

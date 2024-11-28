@@ -54,7 +54,9 @@ class _WriteDiaryPageState extends State<WriteDiaryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF3F3F3),
       appBar: AppBar(
+        backgroundColor: Color(0xFFF3F3F3),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
