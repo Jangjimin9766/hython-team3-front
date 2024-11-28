@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hy_thon_team3/main.dart';
 
 class OnboardingPage extends StatefulWidget {
   @override
@@ -39,8 +40,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
         curve: Curves.easeInOut,
       );
     } else {
-      // 마지막 페이지에서 다른 화면으로 이동 (예: 메인 화면)
-      Navigator.pushReplacementNamed(context, '/home');
+      // "시작하기" 버튼 클릭 시 MainPage로 이동
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainPage()),
+      );
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hy_thon_team3/pages/receivedLetterBoxPage.dart';
 import 'package:hy_thon_team3/pages/sendedLetterboxPage.dart';
 import 'widgets/bottom_navbar.dart';
@@ -13,8 +14,51 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MainPage(), //홈을 메인으로
-      debugShowCheckedModeBanner: false, // 디폴트로 나타나는 상단 디버그 배너 삭제
+      home: SplashScreen(), // 앱의 첫 화면을 SplashScreen으로 설정
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _checkOnBoardingStatus();
+  }
+
+  // SharedPreferences로 접속 횟수 체크
+  Future<void> _checkOnBoardingStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    int launchCount = prefs.getInt('launchCount') ?? 0; // 접속 횟수 (기본값: 0)
+
+    if (launchCount < 10) {
+      // 최초 2회 접속 시 OnboardingPage로 이동
+      prefs.setInt('launchCount', launchCount + 1); // 접속 횟수 증가
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => OnboardingPage()),
+      );
+    } else {
+      // 3회차 이후부터는 MainPage로 이동
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainPage()),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(), // 로딩 화면 표시
+      ),
     );
   }
 }
@@ -29,7 +73,7 @@ class _MainPageState extends State<MainPage> {
 
   // 각 탭에 표시될 페이지들
   static final List<Widget> _pages = <Widget>[
-    const SendedLetterBoxPage(), // 찾기 페이지 대신 SendedLetterBoxPage 사용
+    const SendedLetterBoxPage(),
     const HomePage(),
     const ReceivedLetterBoxPage(),
   ];
@@ -44,7 +88,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(top: 20.0), // 위쪽 패딩 20 추가
+        padding: const EdgeInsets.only(top: 20.0),
         child: _pages[_selectedIndex],
       ),
       bottomNavigationBar: CustomBottomNavBar(
@@ -52,27 +96,23 @@ class _MainPageState extends State<MainPage> {
         onItemTapped: _onItemTapped,
       ),
       floatingActionButton: FloatingActionButton(
-
         onPressed: () {
-          // 버튼 클릭 시 실행할 동작
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => OnboardingPage(),
-            ),
+            MaterialPageRoute(builder: (context) => OnboardingPage()),
           );
         },
-        backgroundColor: Colors.grey, // 버튼 배경색을 회색으로 설정
-        shape: CircleBorder(), // 원형 버튼 강제 설정
+        backgroundColor: Colors.grey,
+        shape: CircleBorder(),
         child: Image.asset(
-          'assets/images/icon_book.png', // 삽입할 이미지 경로
-          fit: BoxFit.contain, // 이미지 비율 유지
-          width: 24, // 이미지 너비
-          height: 24, // 이미지 높이
+          'assets/images/icon_book.png',
+          fit: BoxFit.contain,
+          width: 24,
+          height: 24,
           color: Colors.white,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, // 우측 하단 배치
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
