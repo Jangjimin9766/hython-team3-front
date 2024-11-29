@@ -1,7 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../helper/api_helper.dart';
+import 'package:hy_thon_team3/main.dart';
+import 'package:hy_thon_team3/pages/homePage.dart';
 import '../helper/shared_preferences_helper.dart';
 
 class LoginPage extends StatefulWidget {
@@ -11,39 +10,34 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-  bool _isEmailValid(String email) {
-    // 이메일 정규식 검증
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    return emailRegex.hasMatch(email);
-  }
-
+bool _isEmailValid(String email) {
+  // 이메일 정규식 검증
+  final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+  return emailRegex.hasMatch(email);
+}
 
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final ApiHelper _apiHelper = ApiHelper(baseUrl: 'http://13.124.207.140:8080');
   bool _isLoading = false;
 
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
+    setState(() {
+      _isLoading = true;
+    });
+
+    // API 호출 부분 주석 처리
+    /*
     final body = {
       "name": _emailController.text,
       "password": _passwordController.text,
     };
 
-    setState(() {
-      _isLoading = true;
-    });
-
     try {
       final response = await _apiHelper.post('/api/member/login', body);
-
-      setState(() {
-        _isLoading = false;
-      });
-//accesstoken을 반환하는 api가 있어요,
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
@@ -62,14 +56,22 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     } catch (error) {
-      setState(() {
-        _isLoading = false;
-      });
       print('API 요청 실패: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('서버 연결에 실패했습니다.')),
+        SnackBar(content: Text('로그인 실패')),
       );
     }
+    */
+
+    // 테스트용으로 바로 /home 이동
+    await Future.delayed(const Duration(seconds: 1)); // 로딩 효과용 딜레이
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MainPage()),
+    );
   }
 
   @override
@@ -193,13 +195,11 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: _isLoading
                           ? const CircularProgressIndicator(
-                        valueColor:
-                        AlwaysStoppedAnimation<Color>(Colors.white),
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       )
                           : const Text(
                         '로그인',
-                        style:
-                        TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
                   ),

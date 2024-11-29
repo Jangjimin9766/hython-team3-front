@@ -136,30 +136,6 @@ class _HomePageState extends State<HomePage> {
                         color: Color(0xFF080808),
                       ),
                     ),
-
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        // WriteDiaryPage로 이동
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SignUpPage(),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 100,
-                          vertical: 12,
-                        ),
-                      ),
-                      child: const Text(
-                        '회원가입',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
                   ],
                 ),
               ),

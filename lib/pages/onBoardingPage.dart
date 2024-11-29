@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hy_thon_team3/main.dart';
+import 'package:hy_thon_team3/pages/loginPage.dart';
+import 'package:hy_thon_team3/pages/signUpPage.dart';
 
 class OnboardingPage extends StatefulWidget {
   @override
@@ -40,10 +42,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
         curve: Curves.easeInOut,
       );
     } else {
-      // "시작하기" 버튼 클릭 시 MainPage로 이동
+      // "시작하기" 버튼 클릭 시 LoginPage로 이동
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MainPage()),
+        MaterialPageRoute(builder: (context) => const SignUpPage()),
       );
     }
   }

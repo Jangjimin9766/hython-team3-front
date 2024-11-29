@@ -15,16 +15,29 @@ class _SignUpPageState extends State<SignUpPage> {
 
   bool _isEmailValid(String email) {
     // 이메일 정규식 검증
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+\$');
+    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
     return emailRegex.hasMatch(email);
+  }
+
+  void _showErrorMessage(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('아이디와 비밀번호를 다시 확인해주세요.'),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 
   void _signUp() {
     if (_formKey.currentState!.validate()) {
       print('회원가입 성공');
-      // TODO: API 요청 로직 추가
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
     } else {
-      print('회원가입 실패');
+      _showErrorMessage(context);
     }
   }
 
