@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hy_thon_team3/main.dart';
 import 'package:hy_thon_team3/pages/homePage.dart';
 import '../helper/shared_preferences_helper.dart';
+import '../helper/api_helper.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,7 +13,6 @@ class LoginPage extends StatefulWidget {
 }
 
 bool _isEmailValid(String email) {
-  // 이메일 정규식 검증
   final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
   return emailRegex.hasMatch(email);
 }
@@ -21,6 +22,16 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+  String? _accessToken;
+
+  final ApiHelper apiHelper = ApiHelper();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
@@ -29,45 +40,51 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
 
-    // API 호출 부분 주석 처리
-    /*
     final body = {
       "name": _emailController.text,
       "password": _passwordController.text,
     };
 
     try {
-      final response = await _apiHelper.post('/api/member/login', body);
+      final response = await apiHelper.post('/api/member/login', body);
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        final result = data['result']; // result 객체 추출
 
-        // 토큰 저장
-        await SharedPreferencesHelper.saveAccessToken(data['accessToken']);
+        if (result != null && result['accessToken'] != null) {
+          _accessToken = result['accessToken'];
+          await SharedPreferencesHelper.saveAccessToken(_accessToken!);
 
-        print('로그인 성공: $data');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('로그인 성공!')),
-        );
-        Navigator.pushReplacementNamed(context, '/home');
+          print('로그인 성공: $data');
+          _showSnackBar('로그인 성공!');
+          _navigateToMainPage();
+        } else {
+          print('응답 데이터에 accessToken이 없습니다.');
+          _showSnackBar('로그인 실패: 서버 응답 오류');
+        }
       } else {
-        print('로그인 실패: ${response.body}');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('로그인 실패: ${response.body}')),
-        );
+        final errorData = json.decode(response.body);
+        _showSnackBar('로그인 실패: ${errorData['message'] ?? "오류 발생"}');
       }
     } catch (error) {
+      _showSnackBar('로그인 실패: 네트워크 오류');
       print('API 요청 실패: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('로그인 실패')),
-      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
-    */
+  }
 
-    // 테스트용으로 바로 /home 이동
-    await Future.delayed(const Duration(seconds: 1)); // 로딩 효과용 딜레이
-    setState(() {
-      _isLoading = false;
-    });
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  void _navigateToMainPage() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => MainPage()),
@@ -88,10 +105,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -195,11 +208,13 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: _isLoading
                           ? const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        valueColor:
+                        AlwaysStoppedAnimation<Color>(Colors.white),
                       )
                           : const Text(
                         '로그인',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style:
+                        TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
                   ),
