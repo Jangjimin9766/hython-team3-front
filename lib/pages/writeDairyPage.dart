@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hy_thon_team3/pages/receivedLetterBoxPage.dart';
+import 'package:hy_thon_team3/pages/sendedLetterboxPage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'dart:io';
-
 import '../components/DateSelector.dart';
 import '../components/DiaryInputCard.dart';
-import '../components/ButtonPickPicture.dart';
 import '../components/ButtonSubmit.dart';
 import './completeWriteDiaryPage.dart';
 import '../widgets//bottom_navbar.dart';
@@ -21,35 +19,21 @@ class _WriteDiaryPageState extends State<WriteDiaryPage> {
   XFile? _image;
   final ImagePicker picker = ImagePicker();
   bool _isButtonEnabled = false; // 버튼 활성화 상태
-  int _selectedIndex = 1; // BottomNavBar에서 선택된 탭 (1: 다이어리)
+  int _selectedIndex = 1; // 초기 선택된 탭 (0: 찾기, 1: 홈, 2: 마이페이지)
 
-  // 이미지 선택 함수
-  Future<void> _selectImage(ImageSource source) async {
-    final pickedFile = await picker.pickImage(source: source);
-    if (pickedFile != null) {
-      setState(() {
-        _image = pickedFile;
-      });
-    }
-  }
+  // 각 탭에 표시될 페이지들
+  static final List<Widget> _pages = <Widget>[
+    const SendedLetterBoxPage(),
+    const WriteDiaryPage(),
+    const ReceivedLetterBoxPage(),
+  ];
 
-  // BottomNavBar 탭 변경 함수
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-
-    // 페이지 이동 로직
-    if (index == 0) {
-      // 찾기 페이지로 이동
-      Navigator.pushNamed(context, '/search');
-    } else if (index == 1) {
-      // 현재 페이지 (홈/다이어리)
-    } else if (index == 2) {
-      // 마이페이지로 이동
-      Navigator.pushNamed(context, '/mypage');
-    }
   }
+
 
   @override
   Widget build(BuildContext context) {

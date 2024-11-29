@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hy_thon_team3/pages/signUpPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hy_thon_team3/pages/receivedLetterBoxPage.dart';
 import 'package:hy_thon_team3/pages/sendedLetterboxPage.dart';
@@ -38,18 +39,18 @@ class _SplashScreenState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     int launchCount = prefs.getInt('launchCount') ?? 0; // 접속 횟수 (기본값: 0)
 
-    if (launchCount < 10) {
-      // 최초 2회 접속 시 OnboardingPage로 이동
+    if (launchCount < 3) {
+      // 최초 3회 접속 시 OnboardingPage로 이동
       prefs.setInt('launchCount', launchCount + 1); // 접속 횟수 증가
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => OnboardingPage()),
       );
     } else {
-      // 3회차 이후부터는 MainPage로 이동
+      // 3회차 이후부터는 LoginPage로 이동
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MainPage()),
+        MaterialPageRoute(builder: (context) => const LoginPage()),
       );
     }
   }

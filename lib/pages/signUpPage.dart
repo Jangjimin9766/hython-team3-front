@@ -1,77 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:hy_thon_team3/main.dart';
-import 'package:hy_thon_team3/pages/homePage.dart';
-import '../helper/shared_preferences_helper.dart';
+import 'package:hy_thon_team3/pages/loginPage.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-bool _isEmailValid(String email) {
-  // 이메일 정규식 검증
-  final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-  return emailRegex.hasMatch(email);
-}
-
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
 
-  Future<void> _login() async {
-    if (!_formKey.currentState!.validate()) return;
+  bool _isEmailValid(String email) {
+    // 이메일 정규식 검증
+    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+    return emailRegex.hasMatch(email);
+  }
 
-    setState(() {
-      _isLoading = true;
-    });
-
-    // API 호출 부분 주석 처리
-    /*
-    final body = {
-      "name": _emailController.text,
-      "password": _passwordController.text,
-    };
-
-    try {
-      final response = await _apiHelper.post('/api/member/login', body);
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-
-        // 토큰 저장
-        await SharedPreferencesHelper.saveAccessToken(data['accessToken']);
-
-        print('로그인 성공: $data');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('로그인 성공!')),
-        );
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        print('로그인 실패: ${response.body}');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('로그인 실패: ${response.body}')),
-        );
-      }
-    } catch (error) {
-      print('API 요청 실패: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('로그인 실패')),
-      );
-    }
-    */
-
-    // 테스트용으로 바로 /home 이동
-    await Future.delayed(const Duration(seconds: 1)); // 로딩 효과용 딜레이
-    setState(() {
-      _isLoading = false;
-    });
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => MainPage()),
+  void _showErrorMessage(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('아이디와 비밀번호를 다시 확인해주세요.'),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.red,
+      ),
     );
+  }
+
+  void _signUp() {
+    if (_formKey.currentState!.validate()) {
+      print('회원가입 성공');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+    } else {
+      _showErrorMessage(context);
+    }
   }
 
   @override
@@ -81,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: const Text(
-          '로그인',
+          '회원가입',
           style: TextStyle(
             color: Colors.black,
             fontSize: 20,
@@ -104,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 20),
                 const Center(
                   child: Text(
-                    '환영합니다!\n다시 만나서 반가워요!',
+                    '시작해봅시다!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 26,
@@ -185,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: _isLoading ? null : _login,
+                      onPressed: _signUp,
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         backgroundColor: Colors.black,
@@ -193,15 +160,44 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: _isLoading
-                          ? const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      )
-                          : const Text(
-                        '로그인',
+                      child: const Text(
+                        '가입하기',
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        '이미 가입하셨나요? ',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // 로그인 페이지로 이동
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
+                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                return child; // 애니메이션 없이 바로 전환
+                              },
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          '로그인',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
