@@ -15,7 +15,7 @@ class CustomBottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.search),
+          icon: Icon(Icons.near_me),
           label: '찾기',
         ),
         BottomNavigationBarItem(
@@ -23,7 +23,7 @@ class CustomBottomNavBar extends StatelessWidget {
           label: '홈',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
+          icon: Icon(Icons.mail),
           label: '마이페이지',
         ),
       ],

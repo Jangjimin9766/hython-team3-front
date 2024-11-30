@@ -95,7 +95,7 @@ class _SendedLetterBoxPageState extends State<SendedLetterBoxPage> {
             Text(
               '보낸 편지함',
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
