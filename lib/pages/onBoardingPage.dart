@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hy_thon_team3/main.dart';
 import 'package:hy_thon_team3/pages/loginPage.dart';
 import 'package:hy_thon_team3/pages/signUpPage.dart';
@@ -42,7 +43,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
         curve: Curves.easeInOut,
       );
     } else {
-      // "시작하기" 버튼 클릭 시 LoginPage로 이동
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const SignUpPage()),
@@ -69,6 +69,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const SizedBox(height: 40), // 상단 여백
+                    SvgPicture.asset(
+                      "assets/images/logo_group.svg", // 로고 이미지 경로
+                      width: 65, // 로고 크기 설정
+                      height: 65,
+                    ),
+                    const SizedBox(height: 100), // 로고와 콘텐츠 사이 여백
                     Image.asset(
                       onboardingData[index]["image"]!,
                       width: 200,
