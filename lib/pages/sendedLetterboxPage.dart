@@ -221,7 +221,6 @@ class _SendedLetterBoxPageState extends State<SendedLetterBoxPage> {
       ),
     );
   }
-
   void _showCalendar(BuildContext context) {
     // 캘린더 표시 로직은 생략
   }

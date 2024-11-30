@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     int launchCount = prefs.getInt('launchCount') ?? 0; // 접속 횟수 (기본값: 0)
 
-    if (launchCount < 100) {
+    if (launchCount < 200) {
       // 최초 3회 접속 시 OnboardingPage로 이동
       prefs.setInt('launchCount', launchCount + 1); // 접속 횟수 증가
       Navigator.pushReplacement(
