@@ -129,14 +129,28 @@ class _ReceivedLetterBoxPageState extends State<ReceivedLetterBoxPage> {
                           color: const Color(0xFFFFF4E0), // 베이지색 배경
                           borderRadius: BorderRadius.circular(4), // 약간의 모서리 둥글게
                         ),
-                        child: const Text(
-                          '🕐 24/11/30',
-                          textAlign: TextAlign.center, // 날짜 텍스트를 중앙 정렬
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+                          children: [
+                            const Text(
+                              '🕐',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(width: 5), // 아이콘과 날짜 사이 간격
+                            Text(
+                              DateFormat('yy/MM/dd').format(selectedDate), // 날짜 텍스트
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -159,6 +173,38 @@ class _ReceivedLetterBoxPageState extends State<ReceivedLetterBoxPage> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Align(
+                          alignment: Alignment.centerRight, // 버튼을 오른쪽 정렬
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // WriteDiaryPage로 이동
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation, secondaryAnimation) => const SendedLetterBoxPage(),
+                                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                    return child; // 애니메이션 없이 바로 전환
+                                  },
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 40,
+                                vertical: 12,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8), // 둥근 모서리 정의
+                              ),
+                            ),
+                            child: const Text(
+                              '내 편지 보러 가기',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       ],
@@ -341,83 +387,6 @@ class _ReceivedLetterBoxPageState extends State<ReceivedLetterBoxPage> {
         Text('FRI', style: TextStyle(color: Colors.grey, fontSize: 14)),
         Text('SAT', style: TextStyle(color: Colors.grey, fontSize: 14)),
       ],
-    );
-  }
-
-  Widget _buildLetterCard({
-    required String date,
-    required String title,
-    required String content,
-  }) {
-    return Card(
-      elevation: 2,
-      color: Colors.white, // 배경 색상을 흰색으로 설정
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.access_time, color: Colors.orange), // 노란색 시계 아이콘
-                const SizedBox(width: 8),
-                Text(
-                  date,
-                  style: TextStyle(color: Colors.orange), // 텍스트 색상도 노란색
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              content,
-              style: const TextStyle(color: Colors.grey),
-            ),
-            const SizedBox(height: 16),
-            Align(
-              alignment: Alignment.centerRight, // 버튼을 오른쪽 정렬
-              child: ElevatedButton(
-                onPressed: () {
-                  // WriteDiaryPage로 이동
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) => const SendedLetterBoxPage(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        return child; // 애니메이션 없이 바로 전환
-                      },
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 12,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8), // 둥근 모서리 정의
-                  ),
-                ),
-                child: const Text(
-                  '내 편지 보러가기',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
