@@ -16,6 +16,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'NotoSansKR', // 등록한 폰트 이름
+      ),
       home: SplashScreen(), // 앱의 첫 화면을 SplashScreen으로 설정
       debugShowCheckedModeBanner: false,
     );
