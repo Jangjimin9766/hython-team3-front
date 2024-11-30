@@ -1,13 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:hy_thon_team3/main.dart';
+import 'package:hy_thon_team3/pages/receivedLetterBoxPage.dart';
+import 'package:hy_thon_team3/pages/sendedLetterboxPage.dart';
+import '../widgets//bottom_navbar.dart';
 
-class CompleteWriteDiaryPage extends StatelessWidget {
+class CompleteWriteDiaryPage extends StatefulWidget {
   const CompleteWriteDiaryPage({Key? key}) : super(key: key);
+
+  @override
+  _CompleteWriteDiaryPageState createState() => _CompleteWriteDiaryPageState();
+}
+
+class _CompleteWriteDiaryPageState extends State<CompleteWriteDiaryPage> {
+  int _selectedIndex = 1; // 초기 선택된 탭 (0: 찾기, 1: 홈, 2: 마이페이지)
+
+  static final List<Widget> _pages = <Widget>[
+    const SendedLetterBoxPage(),
+    MainPage(),
+    const ReceivedLetterBoxPage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF3F3F3),
+      backgroundColor: const Color(0xFFF3F3F3),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -26,7 +48,7 @@ class CompleteWriteDiaryPage extends StatelessWidget {
                 color: Colors.grey.withOpacity(0.3),
                 blurRadius: 10,
                 spreadRadius: 5,
-                offset: Offset(0, 4),
+                offset: const Offset(0, 4),
               )
             ],
           ),
@@ -52,7 +74,7 @@ class CompleteWriteDiaryPage extends StatelessWidget {
                 const Text(
                   '여러분의 글은\n 익명으로\n다른 분께 전달됩니다.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, color: Colors.grey,fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
@@ -74,8 +96,8 @@ class CompleteWriteDiaryPage extends StatelessWidget {
                           const end = 1.0;
                           const curve = Curves.easeInOut;
 
-                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                          var fadeAnimation = animation.drive(tween);
+                          final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                          final fadeAnimation = animation.drive(tween);
 
                           return FadeTransition(
                             opacity: fadeAnimation,
@@ -101,6 +123,10 @@ class CompleteWriteDiaryPage extends StatelessWidget {
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }

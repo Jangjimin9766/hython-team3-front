@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     int launchCount = prefs.getInt('launchCount') ?? 0; // 접속 횟수 (기본값: 0)
 
-    if (launchCount < 3) {
+    if (launchCount < 100) {
       // 최초 3회 접속 시 OnboardingPage로 이동
       prefs.setInt('launchCount', launchCount + 1); // 접속 횟수 증가
       Navigator.pushReplacement(
@@ -97,24 +97,6 @@ class _MainPageState extends State<MainPage> {
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-          );
-        },
-        backgroundColor: Colors.grey,
-        shape: CircleBorder(),
-        child: Image.asset(
-          'assets/images/icon_book.png',
-          fit: BoxFit.contain,
-          width: 24,
-          height: 24,
-          color: Colors.white,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

@@ -1,23 +1,11 @@
-import 'package:shared_preferences/shared_preferences.dart';
-
 class SharedPreferencesHelper {
   static const String _accessTokenKey = "accessToken";
+  static const String _hardCodedToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NCwibWVtYmVyTmFtZSI6InZlZW4wMjE5QG5hdmVyLmNvbSIsImlhdCI6MTczMjg2ODEwNX0.AE6vDREPlAkDhizgodtqiwsVSL43epjcxk1J3HFokQ8"; // 하드코딩된 토큰
 
-  // 토큰 저장
-  static Future<void> saveAccessToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_accessTokenKey, token);
-  }
-
-  // 토큰 읽기
   static Future<String?> getAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_accessTokenKey);
+    return _hardCodedToken; // 항상 하드코딩된 값을 반환
   }
 
-  // 토큰 삭제
-  static Future<void> removeAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_accessTokenKey);
-  }
+  static Future<void> saveAccessToken(String token) async {}
+  static Future<void> removeAccessToken() async {}
 }

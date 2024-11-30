@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hy_thon_team3/main.dart';
+import 'package:hy_thon_team3/pages/sendedLetterboxPage.dart';
 import 'package:intl/intl.dart';
 import '../components/DateSelector.dart';
 
@@ -84,7 +86,7 @@ class _ReceivedLetterBoxPageState extends State<ReceivedLetterBoxPage> {
           ],
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,16 +106,63 @@ class _ReceivedLetterBoxPageState extends State<ReceivedLetterBoxPage> {
               onPrevious: _previousDay, // 하루 전으로 이동
               onNext: _nextDay, // 하루 후로 이동
               onTap: () => _showCalendar(context), // 클릭 시 캘린더 표시
+              showArrows: true, // WriteDiaryPage에서는 화살표 숨김
             ),
             const SizedBox(height: 16),
-            Expanded(
-              child: ListView(
+            Card(
+              color: Colors.white,
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start, // 텍스트와 날짜 정렬을 왼쪽으로 설정
                 children: [
-                  _buildLetterCard(
-                    date: '24/11/25',
-                    title: '직장 때문에 힘들었던 하루.',
-                    content:
-                    'Vivamus ornare metus ut interdum mollis. Donec hendrerit elit at faucibus.',
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16, left: 16), // 약간의 상단 및 좌측 여백 추가
+                    child: Align(
+                      alignment: Alignment.centerLeft, // 컨테이너를 왼쪽으로 정렬
+                      child: Container(
+                        width: 100, // 원하는 너비로 제한 (예: 80)
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF4E0), // 베이지색 배경
+                          borderRadius: BorderRadius.circular(4), // 약간의 모서리 둥글게
+                        ),
+                        child: const Text(
+                          '🕐 24/11/30',
+                          textAlign: TextAlign.center, // 날짜 텍스트를 중앙 정렬
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(30.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          '바쁜 하루 속에서 느낀 행복',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          '오늘도 이른 아침부터 하루가 시작됐다. 새벽 6시, 첫 회원님과의 PT 세션으로 하루를 열었다.\n유난히 열정적이셨던 회원님의 모습에 저도 덩달아 에너지를 얻었다. 함께 땀 흘리며 목표를 향해 나아가는 그 순간들이 저에게는 큰 보람으로 다가온다.\n\n오전에는 단체 필라테스 수업이 있었다. 다 함께 운동을 하며 서로를 응원하는 회원님들의 모습을 보니 마음이 따뜻해졌다.\n이런 긍정적인 에너지가 쌓여서인지, 몸은 피곤해도 마음만은 행복으로 가득 차 있다.\n\n점심시간에는 밀린 상담 일정을 소화했다. 새롭게 시작하려는 분들의 결심과 이야기를 들으며, 제가 그분들의 여정에 함께할 수 있다는 사실이 뿌듯했다.\n이후 오후 시간은 PT 세션과 프로그램 준비로 쉴 틈 없이 흘러갔다.\n\n저녁에는 평소보다 늦게까지 체육관에 남아 회원님들이 남긴 질문에 답하고, 내일을 위한 계획을 세웠다.\n하루 종일 바쁘게 움직였지만, 매 순간 제가 누군가의 건강과 행복을 돕고 있다는 사실이 큰 동기부여가 된다.\n\n비록 육체적으로는 피곤하지만, 오늘도 운동을 통해 많은 사람들에게 긍정적인 변화를 줄 수 있었다는 생각에 미소를 지으며 잠자리에 든다.\n내일도 누군가의 목표를 응원하며 또 다른 행복을 만들어가고 싶다.',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -333,6 +382,38 @@ class _ReceivedLetterBoxPageState extends State<ReceivedLetterBoxPage> {
             Text(
               content,
               style: const TextStyle(color: Colors.grey),
+            ),
+            const SizedBox(height: 16),
+            Align(
+              alignment: Alignment.centerRight, // 버튼을 오른쪽 정렬
+              child: ElevatedButton(
+                onPressed: () {
+                  // WriteDiaryPage로 이동
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => const SendedLetterBoxPage(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return child; // 애니메이션 없이 바로 전환
+                      },
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // 둥근 모서리 정의
+                  ),
+                ),
+                child: const Text(
+                  '내 편지 보러가기',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             ),
           ],
         ),

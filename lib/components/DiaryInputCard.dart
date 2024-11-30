@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'CustomDropdown.dart';
 
 class DiaryInputCard extends StatefulWidget {
-  final Function(String?) onDropdown1Changed;
-  final Function(String?) onDropdown2Changed;
+  final Function(int?) onDropdown1Changed; // 드롭다운 1 인덱스 전달
+  final Function(int?) onDropdown2Changed; // 드롭다운 2 인덱스 전달
   final Function(String) onTextChanged;
   final Function(bool) onCharacterCountValid; // 최소 글자수 유효 여부 전달
   final Widget? imagePreview;
@@ -46,7 +46,7 @@ class _DiaryInputCardState extends State<DiaryInputCard> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Container(
-        padding: const EdgeInsets.only(top:20,left:10,right:10,bottom:0 ),
+        padding: const EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -63,7 +63,11 @@ class _DiaryInputCardState extends State<DiaryInputCard> {
                 CustomDropdown(
                   initialValue: '직장',
                   items: ['직장', '학업', '가족', '친구', '인간관계', '건강', '날씨', '연애/사랑', '돈', '기타'],
-                  onChanged: widget.onDropdown1Changed,
+                  onChanged: (value) {
+                    final index = ['직장', '학업', '가족', '친구', '인간관계', '건강', '날씨', '연애/사랑', '돈', '기타']
+                        .indexOf(value ?? '');
+                    widget.onDropdown1Changed(index != -1 ? index : null);
+                  },
                 ),
                 const Text(
                   "때문에/덕분에",
@@ -72,7 +76,10 @@ class _DiaryInputCardState extends State<DiaryInputCard> {
                 CustomDropdown(
                   initialValue: '힘들었던',
                   items: ['힘들었던', '좋았던', '특별했던'],
-                  onChanged: widget.onDropdown2Changed,
+                  onChanged: (value) {
+                    final index = ['힘들었던', '좋았던', '특별했던'].indexOf(value ?? '');
+                    widget.onDropdown2Changed(index != -1 ? index : null);
+                  },
                 ),
                 const Text(
                   "이야기를 들려줄게.",

@@ -19,6 +19,12 @@ class _SignUpPageState extends State<SignUpPage> {
     return emailRegex.hasMatch(email);
   }
 
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
   void _showErrorMessage(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -31,11 +37,16 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void _signUp() {
     if (_formKey.currentState!.validate()) {
-      print('회원가입 성공');
+      _showSnackBar('회원가입 성공!');
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) => const LoginPage(),
+          transitionDuration: Duration.zero, // 애니메이션 지속 시간 0으로 설정
+          reverseTransitionDuration: Duration.zero,
+        ),
       );
+
     } else {
       _showErrorMessage(context);
     }
@@ -44,6 +55,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF3F3F3),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,

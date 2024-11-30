@@ -1,9 +1,9 @@
-import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hy_thon_team3/main.dart';
 import 'package:hy_thon_team3/pages/homePage.dart';
+import 'package:hy_thon_team3/pages/signUpPage.dart';
 import '../helper/shared_preferences_helper.dart';
-import '../helper/api_helper.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -22,9 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-  String? _accessToken;
-
-  final ApiHelper apiHelper = ApiHelper();
+  final String _hardCodedAccessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NCwibWVtYmVyTmFtZSI6InZlZW4wMjE5QG5hdmVyLmNvbSIsImlhdCI6MTczMjg2ODEwNX0.AE6vDREPlAkDhizgodtqiwsVSL43epjcxk1J3HFokQ8";
 
   @override
   void dispose() {
@@ -40,43 +38,19 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
 
-    final body = {
-      "name": _emailController.text,
-      "password": _passwordController.text,
-    };
+    // 3초 로딩 후 AccessToken 저장 및 이동
+    await Future.delayed(const Duration(seconds: 3));
 
-    try {
-      final response = await apiHelper.post('/api/member/login', body);
+    await SharedPreferencesHelper.saveAccessToken(_hardCodedAccessToken);
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final result = data['result']; // result 객체 추출
+    print('로그인 성공: AccessToken 저장됨.');
+    _showSnackBar('로그인 성공!');
+    _navigateToMainPage();
 
-        if (result != null && result['accessToken'] != null) {
-          _accessToken = result['accessToken'];
-          await SharedPreferencesHelper.saveAccessToken(_accessToken!);
-
-          print('로그인 성공: $data');
-          _showSnackBar('로그인 성공!');
-          _navigateToMainPage();
-        } else {
-          print('응답 데이터에 accessToken이 없습니다.');
-          _showSnackBar('로그인 실패: 서버 응답 오류');
-        }
-      } else {
-        final errorData = json.decode(response.body);
-        _showSnackBar('로그인 실패: ${errorData['message'] ?? "오류 발생"}');
-      }
-    } catch (error) {
-      _showSnackBar('로그인 실패: 네트워크 오류');
-      print('API 요청 실패: $error');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    setState(() {
+      _isLoading = false;
+    });
   }
-
 
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -94,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF3F3F3),
+      backgroundColor: const Color(0xFFF3F3F3),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -194,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
                 Center(
                   child: SizedBox(
                     width: double.infinity,
@@ -209,13 +183,37 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: _isLoading
                           ? const CircularProgressIndicator(
-                        valueColor:
-                        AlwaysStoppedAnimation<Color>(Colors.white),
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       )
                           : const Text(
                         '로그인',
-                        style:
-                        TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(
+                            color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15), // 로그인 버튼과 텍스트 사이 간격
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => const SignUpPage(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            return child; // 애니메이션 없이 전환
+                          },
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      '회원가입가기',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold, // 볼드체
+                        color: Colors.black, // 검정색
+                        decoration: TextDecoration.underline, // 밑줄
+                        fontSize: 14,
                       ),
                     ),
                   ),

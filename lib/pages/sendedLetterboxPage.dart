@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hy_thon_team3/main.dart';
+import 'package:hy_thon_team3/pages/receivedLetterBoxPage.dart';
 import 'package:intl/intl.dart';
 import '../components/DateSelector.dart';
 
@@ -84,7 +86,7 @@ class _SendedLetterBoxPageState extends State<SendedLetterBoxPage> {
           ],
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,16 +106,154 @@ class _SendedLetterBoxPageState extends State<SendedLetterBoxPage> {
               onPrevious: _previousDay, // 하루 전으로 이동
               onNext: _nextDay, // 하루 후로 이동
               onTap: () => _showCalendar(context), // 클릭 시 캘린더 표시
+              showArrows: true, // WriteDiaryPage에서는 화살표 숨김
             ),
             const SizedBox(height: 16),
-            Expanded(
-              child: ListView(
+            Card(
+              color: Colors.white,
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start, // 텍스트와 날짜 정렬을 왼쪽으로 설정
                 children: [
-                  _buildLetterCard(
-                    date: '24/11/25',
-                    title: '누군가에게 응원의 메시지를 보냈어요.',
-                    content:
-                    'Curabitur luctus eros eget nisl auctor, ac tempus ipsum luctus.',
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16, left: 16), // 약간의 상단 및 좌측 여백 추가
+                    child: Align(
+                      alignment: Alignment.centerLeft, // 컨테이너를 왼쪽으로 정렬
+                      child: Container(
+                        width: 100, // 원하는 너비로 제한 (예: 80)
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF4E0), // 베이지색 배경
+                          borderRadius: BorderRadius.circular(4), // 약간의 모서리 둥글게
+                        ),
+                        child: const Text(
+                          '🕐 24/11/30',
+                          textAlign: TextAlign.center, // 날짜 텍스트를 중앙 정렬
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(30.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          '쉴 새 없이 바빴던 하루',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          '오늘 하루는 시작부터 정신없이 바빴다.\n아침 7시에 눈을 뜨자마자 밀린 이메일을 확인하고 답장을 보내는 것으로 하루를 시작했다.\n출근길에는 미리 준비해둔 자료를 검토하며 다급하게 오늘의 일정을 정리했다.\n사무실에 도착하자마자 팀원들과의 회의가 이어졌고, 새로운 프로젝트 브리핑을 준비하느라 쉴 틈이 없었다.\n\n점심시간조차 제대로 즐기지 못한 채 간단한 샌드위치로 끼니를 때우고, 다시 업무에 몰두했다.\n오후에는 고객과의 미팅이 이어졌고, 갑작스러운 문제로 추가적인 자료를 준비하느라 예정보다 늦게까지 자리를 지켜야 했다.\n\n퇴근 시간이 되어서야 모든 일이 끝났지만, 이미 에너지는 바닥나 있었다.\n집에 도착해서도 쉬지 못하고 다음 날의 준비를 해야 한다는 압박감에 잠시도 마음을 놓을 수 없었다.\n\n비록 바쁜 하루였지만, 해야 할 일을 하나씩 해결해 나가는 과정에서 작은 성취감도 느낄 수 있었다.\n내일은 오늘보다 조금 더 여유를 가지며 보낼 수 있기를 바라며 하루를 마무리한다.',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Card(
+              color: Colors.white,
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start, // 텍스트와 날짜 정렬을 왼쪽으로 설정
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16, left: 16), // 약간의 상단 및 좌측 여백 추가
+                    child: Align(
+                      alignment: Alignment.centerLeft, // 컨테이너를 왼쪽으로 정렬
+                      child: Container(
+                        width: 100, // 원하는 너비로 제한 (예: 80)
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF4E0), // 베이지색 배경
+                          borderRadius: BorderRadius.circular(4), // 약간의 모서리 둥글게
+                        ),
+                        child: const Text(
+                          '🕐 24/11/30',
+                          textAlign: TextAlign.center, // 날짜 텍스트를 중앙 정렬
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(30.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          '바쁜 하루 속에서 느낀 행복',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          '오늘도 이른 아침부터 하루가 시작됐다. 새벽 6시, 첫 회원님과의 PT 세션으로 하루를 열었다.\n유난히 열정적이셨던 회원님의 모습에 .....',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Align(
+                          alignment: Alignment.centerRight, // 버튼을 오른쪽 정렬
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // WriteDiaryPage로 이동
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation, secondaryAnimation) => const ReceivedLetterBoxPage(),
+                                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                    return child; // 애니메이션 없이 바로 전환
+                                  },
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 40,
+                                vertical: 12,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8), // 둥근 모서리 정의
+                              ),
+                            ),
+                            child: const Text(
+                              '답장 보러가기',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

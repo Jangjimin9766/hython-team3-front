@@ -54,7 +54,8 @@ class _WriteDiaryPageState extends State<WriteDiaryPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             DateSelector(
-              date: '2024/11/25',
+              date: '2024/11/30',
+              showArrows: false, // WriteDiaryPage에서는 화살표 숨김
               onPrevious: () => print('이전 날짜로 이동'),
               onNext: () => print('다음 날짜로 이동'),
             ),
@@ -80,8 +81,11 @@ class _WriteDiaryPageState extends State<WriteDiaryPage> {
                           ? () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => const CompleteWriteDiaryPage(),
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => const CompleteWriteDiaryPage(),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              return child; // 애니메이션 없이 전환
+                            },
                           ),
                         );
                       }
