@@ -70,6 +70,7 @@ class _ReceivedLetterBoxPageState extends State<ReceivedLetterBoxPage> {
   }
 
   // API 호출 메서드
+// API 호출 메서드
   Future<void> _fetchDiary(DateTime date) async {
     setState(() {
       isLoading = true;
@@ -83,7 +84,7 @@ class _ReceivedLetterBoxPageState extends State<ReceivedLetterBoxPage> {
       final response = await http.get(
         Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwibWVtYmVyTmFtZSI6IuyGjeuPhCIsImlhdCI6MTczMjg5MTQxNX0.rRAd5FFcc8wgaipwrptCvYXArAO35bMqOvUJNyyYpTw',
+          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwibWVtYmVyTmFtZSI6IuyGjeuPhCIsImlhdCI6MTczMjk0OTMxNX0.hbjBaXcsp3TLXv5zRZ7_d8x0W6DWVI4zR_osiZPGd58',
         },
       );
 
@@ -103,7 +104,7 @@ class _ReceivedLetterBoxPageState extends State<ReceivedLetterBoxPage> {
         } else {
           print('응답 데이터에 result가 없거나 isSuccess가 false입니다.');
           setState(() {
-            diaryTitle = null;
+            diaryTitle = null; // 데이터 초기화
             diaryContent = null;
             isLoading = false;
           });
@@ -116,157 +117,158 @@ class _ReceivedLetterBoxPageState extends State<ReceivedLetterBoxPage> {
     } catch (e) {
       print('API 호출 중 예외 발생: $e');
       setState(() {
+        diaryTitle = null; // 데이터 초기화
+        diaryContent = null;
         hasError = true;
         isLoading = false;
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF3F3F3),
-      appBar: AppBar(
         backgroundColor: Color(0xFFF3F3F3),
-        elevation: 0,
-        title: Row(
-          children: [
-            Image.asset(
-              'assets/images/icon_paper_airplane.png',
-              width: 24,
-              height: 24,
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              '느린 우체국',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+        appBar: AppBar(
+          backgroundColor: Color(0xFFF3F3F3),
+          elevation: 0,
+          title: Row(
+            children: [
+              Image.asset(
+                'assets/images/icon_paper_airplane.png',
+                width: 24,
+                height: 24,
               ),
-            ),
-          ],
-        ),
-      ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator()) // 로딩 중
-          : hasError
-          ? const Center(child: Text('편지를 불러오는 데 실패했습니다.')) // 에러 발생
-          : SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              '받은 편지함',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 15),
-            DateSelector(
-              date: DateFormat('yyyy/MM/dd').format(selectedDate),
-              onPrevious: _previousDay, // 하루 전으로 이동
-              onNext: _nextDay, // 하루 후로 이동
-              onTap: () => _showCalendar(context), // 클릭 시 캘린더 표시
-              showArrows: true, // WriteDiaryPage에서는 화살표 숨김
-            ),
-            const SizedBox(height: 16),
-            Card(
-              color: Colors.white,
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 날짜와 아이콘을 포함한 Row
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        width: 110, // 원하는 너비
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFF4E0), // 베이지색 배경
-                          borderRadius: BorderRadius.circular(4), // 약간의 모서리 둥글게
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
-                          children: [
-                            const Text(
-                              '🕐',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(width: 5), // 아이콘과 날짜 간격
-                            Text(
-                              DateFormat('yy/MM/dd').format(selectedDate), // 날짜 텍스트
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16), // 날짜와 제목 사이 간격
-                    // 편지 제목
-                    Text(
-                      diaryTitle ?? '받은 편지가 없습니다.', // 제목 표시
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16), // 제목과 본문 사이 간격
-                    // 본문과 버튼은 편지가 있을 때만 표시
-                    if (diaryContent != null) ...[
-                      Text(
-                        diaryContent ?? '', // 본문 텍스트
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                      const SizedBox(height: 16), // 본문과 버튼 사이 간격
-                      Align(
-                        alignment: Alignment.centerRight, // 버튼 오른쪽 정렬
-                        child: ElevatedButton(
-                          onPressed: diaryTitle != null
-                              ? () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const SendedLetterBoxPage(),
-                              ),
-                            );
-                          }
-                              : null, // 제목이 없으면 버튼 비활성화
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: diaryTitle != null ? Colors.black : Colors.grey, // 활성화 여부에 따른 색상
-                            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Text(
-                            '내 편지 보러 가기',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
+              const SizedBox(width: 8),
+              const Text(
+                '느린 우체국',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
+            ],
+          ),
+        ),
+        body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '받은 편지함',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 15),
+                  DateSelector(
+                    date: DateFormat('yyyy/MM/dd').format(selectedDate),
+                    onPrevious: _previousDay, // 하루 전으로 이동
+                    onNext: _nextDay, // 하루 후로 이동
+                    onTap: () => _showCalendar(context), // 클릭 시 캘린더 표시
+                    showArrows: true, // WriteDiaryPage에서는 화살표 숨김
+                  ),
+                  const SizedBox(height: 16),
+                  Card(
+                    color: Colors.white,
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 날짜와 아이콘을 포함한 Row
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              width: 110, // 원하는 너비
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFF4E0), // 베이지색 배경
+                                borderRadius: BorderRadius.circular(4), // 약간의 모서리 둥글게
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+                                children: [
+                                  const Text(
+                                    '🕐',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5), // 아이콘과 날짜 간격
+                                  Text(
+                                    DateFormat('yy/MM/dd').format(selectedDate), // 날짜 텍스트
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16), // 날짜와 제목 사이 간격
+                          // 편지 제목
+                          Text(
+                            diaryTitle ?? '받은 편지가 없습니다.', // 결과가 없으면 해당 메시지 표시
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 16), // 제목과 본문 사이 간격
+                          // 편지 내용 (내용이 없으면 비워둠)
+                          if (diaryContent != null) ...[
+                            Text(
+                              diaryContent ?? '', // 본문 텍스트
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                            const SizedBox(height: 16), // 본문과 버튼 사이 간격
+                          ],
+                          // "내 편지 보러 가기" 버튼 (항상 렌더링, 비활성화 상태 가능)
+                          Align(
+                            alignment: Alignment.centerRight, // 버튼 오른쪽 정렬
+                            child: ElevatedButton(
+                              onPressed: diaryTitle != null
+                                  ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SendedLetterBoxPage(),
+                                  ),
+                                );
+                              }
+                                  : null, // 제목이 없으면 버튼 비활성화
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: diaryTitle != null ? Colors.black : Colors.grey, // 활성화 여부에 따른 색상
+                                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                '내 편지 보러 가기',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ]
             )
 
-          ],
-        ),
-      ),
+        )
+
     );
   }
 
@@ -414,15 +416,6 @@ class _ReceivedLetterBoxPageState extends State<ReceivedLetterBoxPage> {
                                       ),
                                     ),
                                   ),
-                                  if (day.weekday == DateTime.sunday) // 빨간 점 추가
-                                    const Padding(
-                                      padding: EdgeInsets.only(top: 4.0),
-                                      child: Icon(
-                                        Icons.circle,
-                                        size: 4,
-                                        color: Colors.red,
-                                      ),
-                                    ),
                                 ],
                               ),
                             );
