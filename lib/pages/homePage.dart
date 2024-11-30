@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
               const Text(
                 '편지 작성하기',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
